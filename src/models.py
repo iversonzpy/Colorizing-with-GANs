@@ -119,12 +119,13 @@ class BaseModel:
         dataset = TestDataset(self.options.test_input or (self.options.checkpoints_path + '/test'))
         outputs_path = create_dir(self.options.test_output or (self.options.checkpoints_path + '/output'))
 
+
         for index in range(len(dataset)):
             img_gray_path, img_gray = dataset[index]
             name = os.path.basename(img_gray_path)
             path = os.path.join(outputs_path, name)
-
-            feed_dic = {self.input_gray: img_gray[None, :, :, None]}
+#             feed_dic = {self.input_gray: img_gray[ None, :, :,:1]}
+            feed_dic = {self.input_gray: img_gray[ None, :, :,:1]}
             outputs = self.sess.run(self.sampler, feed_dict=feed_dic)
             outputs = postprocess(tf.convert_to_tensor(outputs), colorspace_in=self.options.color_space, colorspace_out=COLORSPACE_RGB).eval() * 255
             print(path)
